@@ -51,7 +51,10 @@ SECONDARY = ("Secondary/incidental findings were identified by screening rare va
              "(AR hypogonadotropic hypogonadism carrier) and FLG p.Arg2447Ter (ichthyosis vulgaris risk). These are listed after all primary candidates.")
 
 RUNTIME = ("Local laptop (Apple M2 Max, 12 cores, 32 GB RAM); no cloud cost. Exomiser: ~42 s after data unpacking. "
-           "VEP whole-genome annotation of ~5.0 M records: ~36 h wall time (Docker, --fork 10). Data/cache downloads: several hours. "
+           "VEP whole-genome annotation of ~5.0 M records: 36 h 38 min wall time (VEP stats: 131,888 s; Docker Desktop on macOS, --fork 10, "
+           "--hgvs against a gzipped FASTA). This was an unoptimised single-process run; splitting the VCF per chromosome, running VEP natively "
+           "with an uncompressed indexed FASTA and dropping --hgvs would reduce it to a few hours, and Exomiser alone gives the same top gene in under a minute. "
+           "An earlier VEP attempt with --everything was abandoned after ~3 h. Data/cache downloads: several hours. "
            "Manual curation and review: ~[TODO: hours] person-hours.")
 
 ABSTRACT = """\
