@@ -16,8 +16,8 @@ APPROACH = """\
 5. Targeted review: every rare (max gnomAD AF <1%) MANE/canonical variant from the VEP output was screened for (a) ClinVar pathogenic/likely pathogenic, (b) HIGH/MODERATE impact in a phenotype-driven gene panel (spindle assembly checkpoint / MVA genes, rhabdomyosarcoma predisposition and RASopathy genes, nephrocalcinosis genes, primordial dwarfism and DNA repair genes) and (c) ACMG SF v3.2 genes for secondary findings.
 6. Curation and ranking: candidates were kept or dropped by genotype, read support, allele frequency, predicted effect, gene-disease fit and inheritance. Apparent compound-het pairs whose two variants lie a few bp apart (FANCD2, SERPINA1, MTCH2, ADAMTS1) were treated as cis/single events, not two hits. Recurrent artefact-prone loci (HLA, MUC4, KRTAP, olfactory receptors) were excluded. Every call was checked against the VCF (PASS, genotype, allele depths). epcr is computed, not assigned: epcr = P_variant x P_gene x P_inheritance, where P_variant is the Bayesian ACMG posterior (Tavtigian 2018/2020 point system: prior 0.10, odds x2.08 per point; product over both variants of a pair), P_gene is a ClinGen-style gene-disease validity tier (definitive 1.0 ... none 0.02) and P_inheritance is the probability the inheritance requirement is met (trans phase for a pair, second-hit chance for a lone het in a recessive gene, penetrance for a dominant secondary finding). Every ACMG criterion and constant is listed per row in epcr.py and epcr_audit.tsv. Rows are listed primary first, by decreasing epcr, then secondary."""
 
-AI = ("Anthropic Claude Code CLI, model Claude Opus 5.5, [TODO: plan/tier, e.g. Claude Max / Team / API], "
-      "[TODO: data setting, e.g. commercial terms, no training on customer content]. Used as a coding and analysis assistant "
+AI = ("Anthropic Claude Code CLI, model Claude Opus 5.5, Claude Max plan, "
+      "training opt-out enabled, no feedback provided. Used as a coding and analysis assistant "
       "(writing pipeline scripts, querying annotation output, drafting curation notes and this form). "
       "All variant calls and final rankings were checked against the underlying VCF and annotations.")
 
@@ -28,7 +28,7 @@ MANUAL = ("Manual review of the Exomiser ranking and filtered VEP candidates: (1
           "olfactory receptors); (2) re-evaluated Exomiser compound-het calls and rejected pairs whose variants lie within a few bp "
           "(likely the same haplotype/complex event); (3) checked gene-disease fit against the phenotype using OMIM/ClinVar knowledge "
           "(BUB1B biallelic loss -> mosaic variegated aneuploidy type 1 with rhabdomyosarcoma and growth failure); (4) confirmed every "
-          "submitted variant in the VCF (PASS, 0/1, allele depths about 50%); (5) assigned ACMG/AMP criteria, gene-disease validity tiers and inheritance/penetrance "
+          "submitted variant in the VCF (PASS, 0/1, allele depths checked; SLC34A1 and FANCD2 sit near 30%); (5) assigned ACMG/AMP criteria, gene-disease validity tiers and inheritance/penetrance "
           "assumptions per row (the judgement step), from which epcr is then computed by epcr.py; separated primary from secondary findings. Rows 5-7 are the next-best non-artefact Exomiser candidates, kept at low epcr to complete the top 10.")
 
 DATA_PUBLIC = "Only publicly available data were used."
@@ -55,7 +55,7 @@ RUNTIME = ("Local laptop (Apple M2 Max, 12 cores, 32 GB RAM); no cloud cost. Exo
            "--hgvs against a gzipped FASTA). This was an unoptimised single-process run; splitting the VCF per chromosome, running VEP natively "
            "with an uncompressed indexed FASTA and dropping --hgvs would reduce it to a few hours, and Exomiser alone gives the same top gene in under a minute. "
            "An earlier VEP attempt with --everything was abandoned after ~3 h. Data/cache downloads: several hours. "
-           "Manual curation and review: ~[TODO: hours] person-hours.")
+           "Manual curation and review: not formally tracked.")
 
 ABSTRACT = """\
 We ranked candidate variants for a single proband with short-read whole-genome sequencing and a phenotype of rhabdomyosarcoma, nephrocalcinosis, short stature, failure to thrive, muscle atrophy, prematurity/small for gestational age and a family history of recurrent miscarriage. We pair standard open-source tools with targeted curation.
@@ -69,7 +69,7 @@ Strengths. Public data and open-source tools only; reproducible on a laptop. Com
 Limitations. Singleton data: the BUB1B variants are ~11 kb apart, so trans phase cannot be established from short reads. Parental testing or long-read sequencing is needed. The missense allele has no functional data. A whole-genome rerun scoring intronic variants with SpliceAI kept BUB1B first; structural, copy-number, repeat-expansion, mitochondrial and purely regulatory variants were not assessed. Assigning ACMG criteria, validity tiers and penetrance values is still a curated step, so the pipeline is not fully automated. Lower-ranked rows mainly complete the top-10 list. A bulk-WGS screen (GC-corrected depth and allele-balance per chromosome, centromeres masked) found no clonal whole-chromosome gain or loss, but variegated aneuploidy averages out in bulk data, so this neither supports nor refutes MVA; karyotyping is needed."""
 
 ANSWERS = {
-    7: "[TODO: team name]",
+    7: "semel",
     8: 1,
     9: APPROACH,
     10: AI,

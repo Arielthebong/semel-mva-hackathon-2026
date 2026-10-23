@@ -1,0 +1,12 @@
+# Patient data and derived files: never committed (hackathon Data Transfer Agreement)
+data/
+results/
+*.vcf.gz
+*.vcf.gz.tbi
+*.bam
+*.bai
+*.cram
+*.fastq.gz
+# Third-party tools and databases (downloaded by the scripts)
+tools/
+.DS_Store

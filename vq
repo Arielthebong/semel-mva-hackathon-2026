@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# vq — query the WGS VCF by gene symbol or region.
+#
+#   ./vq BRCA1                  all calls in BRCA1
+#   ./vq BRCA1 --pass           PASS-only
+#   ./vq 17:43044295-43125364   explicit region (GRCh38, no "chr" prefix)
+#   ./vq TP53 --count           just the number of variants
+#   ./vq TP53 --raw -- <args>   pass extra args straight to bcftools view
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VCF="${VQ_VCF:-$HERE/data/WGS_EX2312012_HGWCNDSX7.vcf.gz}"
+GENES="${VQ_GENES:-$HERE/data/ref/genes_hg38.tsv}"
+
+[[ $# -ge 1 ]] || { sed -n '2,9p' "$0" | sed 's/^# \?//'; exit 1; }
+
+target="$1"; shift
+mode="table"; extra=()
+for a in "$@"; do
+  case "$a" in
+    --pass)  extra+=(-f PASS) ;;
+    --count) mode="count" ;;
+    --raw)   mode="raw" ;;
+    --)      ;;
+    *)       extra+=("$a") ;;
+  esac
+done
+
+# Resolve gene symbol -> region, unless it already looks like chr:start-end
+if [[ "$target" =~ ^[0-9XYM]+(:[0-9]+-[0-9]+)?$ ]]; then
+  region="$target"; label="$target"
+else
+  line=$(awk -F'\t' -v g="$target" '$1==g {print; exit}' "$GENES" || true)
+  [[ -n "$line" ]] || { echo "vq: gene '$target' not found in $GENES" >&2; exit 2; }
+  IFS=$'\t' read -r sym chrom start end <<<"$line"
+  region="${chrom}:${start}-${end}"
+  label="$sym ($region, $((end-start+1)) bp)"
+fi
+
+case "$mode" in
+  count)
+    n=$(bcftools view -H -r "$region" ${extra[@]+"${extra[@]}"} "$VCF" | wc -l | tr -d ' ')
+    echo "$label: $n variants" ;;
+  raw)
+    bcftools view -r "$region" ${extra[@]+"${extra[@]}"} "$VCF" ;;
+  table)
+    echo "# $label"
+    { printf 'CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tGT\tDP\n'
+      bcftools query -r "$region" ${extra[@]+"${extra[@]}"} \
+        -f '%CHROM\t%POS\t%ID\t%REF\t%ALT\t%QUAL\t%FILTER\t[%GT]\t[%DP]\n' "$VCF"
+    } | column -t -s $'\t' ;;
+esac

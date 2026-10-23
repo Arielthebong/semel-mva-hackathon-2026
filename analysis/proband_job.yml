@@ -1,0 +1,71 @@
+---
+phenopacket:
+  id: WGS_EX2312012
+  subject:
+    id: WGS_EX2312012
+    sex: MALE
+  phenotypicFeatures:
+    - type: { id: HP:0002859, label: Rhabdomyosarcoma }
+    - type: { id: HP:0000121, label: Nephrocalcinosis }
+    - type: { id: HP:0004322, label: Short stature }
+    - type: { id: HP:0001508, label: Failure to thrive }
+    - type: { id: HP:0003202, label: Skeletal muscle atrophy }
+    - type: { id: HP:0001622, label: Premature birth }
+    - type: { id: HP:0001518, label: Small for gestational age }
+    - type: { id: HP:0200067, label: Recurrent spontaneous abortion }
+  htsFiles:
+    - uri: /Users/arielbong/.superset/worktrees/crucible/watery-carver/data/WGS_EX2312012_HGWCNDSX7.vcf.gz
+      htsFormat: VCF
+      genomeAssembly: hg38
+  metaData:
+    created: '2026-09-05T00:00:00Z'
+    createdBy: mva-hackathon-2026
+    resources:
+      - id: hp
+        name: human phenotype ontology
+        url: http://purl.obolibrary.org/obo/hp.owl
+        version: hp/releases/2025-01-01
+        namespacePrefix: HP
+        iriPrefix: 'http://purl.obolibrary.org/obo/HP_'
+    phenopacketSchemaVersion: 1.0
+analysis:
+  analysisMode: PASS_ONLY
+  inheritanceModes: {
+    AUTOSOMAL_DOMINANT: 0.1,
+    AUTOSOMAL_RECESSIVE_COMP_HET: 2.0,
+    AUTOSOMAL_RECESSIVE_HOM_ALT: 0.1,
+    X_DOMINANT: 0.1,
+    X_RECESSIVE_COMP_HET: 2.0,
+    X_RECESSIVE_HOM_ALT: 0.1,
+    MITOCHONDRIAL: 0.2
+  }
+  frequencySources: [
+    UK10K,
+    GNOMAD_E_AFR, GNOMAD_E_AMR, GNOMAD_E_EAS, GNOMAD_E_NFE, GNOMAD_E_SAS,
+    GNOMAD_G_AFR, GNOMAD_G_AMR, GNOMAD_G_EAS, GNOMAD_G_NFE, GNOMAD_G_SAS
+  ]
+  pathogenicitySources: [ REVEL, MVP, ALPHA_MISSENSE, SPLICE_AI ]
+  steps: [
+    failedVariantFilter: { },
+    variantEffectFilter: {
+      remove: [
+        FIVE_PRIME_UTR_EXON_VARIANT, FIVE_PRIME_UTR_INTRON_VARIANT,
+        THREE_PRIME_UTR_EXON_VARIANT, THREE_PRIME_UTR_INTRON_VARIANT,
+        NON_CODING_TRANSCRIPT_EXON_VARIANT, UPSTREAM_GENE_VARIANT,
+        INTERGENIC_VARIANT, REGULATORY_REGION_VARIANT,
+        CODING_TRANSCRIPT_INTRON_VARIANT, NON_CODING_TRANSCRIPT_INTRON_VARIANT,
+        DOWNSTREAM_GENE_VARIANT
+      ]
+    },
+    frequencyFilter: { maxFrequency: 2.0 },
+    pathogenicityFilter: { keepNonPathogenic: true },
+    inheritanceFilter: { },
+    omimPrioritiser: { },
+    hiPhivePrioritiser: { }
+  ]
+outputOptions:
+  outputContributingVariantsOnly: false
+  numGenes: 0
+  outputDirectory: /Users/arielbong/.superset/worktrees/crucible/watery-carver/results
+  outputFileName: proband-hiphive-coding
+  outputFormats: [ HTML, JSON, TSV_GENE, TSV_VARIANT, VCF ]
