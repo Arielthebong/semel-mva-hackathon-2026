@@ -4,8 +4,8 @@
 
 | File | What it is |
 |---|---|
-| `submission/semel_exomiser-lirical-bayesian-acmg.csv` | Submitted predictions (template format, 10 rows) |
-| `submission/semel_track1_report.md` | Submitted report: methods, evidence, limitations, AI disclosure |
+| `predictions/semel_predictions.csv` | Submitted predictions (template format, 10 rows) |
+| `reports/semel_report.md` | Submitted report: methods, evidence, limitations, AI disclosure |
 | `submission/epcr.py`, `EPCR_METHOD.md`, `epcr_audit.tsv`, `epcr_method.pdf` | How epcr is computed (Bayesian ACMG × gene validity × inheritance), with per-row audit |
 | `submission/track1_submission.csv` | Working copy with extra `gene` columns (not the submitted file) |
 | `submission/fill_methods_form.py` → `methods_description_form_filled.xlsx` | Organisers' methods template, filled (earlier draft; the report supersedes it) |
