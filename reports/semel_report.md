@@ -1,7 +1,7 @@
 # Track 1 report — team semel
 
 **Rare Disease, Real Kid: The MVA Hackathon 2026 · Track 1 (variant prediction)**
-Proband WGS_EX2312012 (GRCh38, singleton, male) · Predictions file: `semel_predictions.csv` · Code: https://github.com/Arielthebong/semel-mva-hackathon-2026
+Proband PROBAND01 (VCF sample WGS_EX2312012; GRCh38, singleton, male) · Predictions file: `semel_predictions.csv` · Code: https://github.com/Arielthebong/semel-mva-hackathon-2026
 
 **AI disclosure.** Anthropic Claude Code (model Claude Opus 5.5), Claude Max plan, training opt-out enabled, no feedback provided. Claude was used as a coding and analysis assistant: writing the pipeline scripts, querying annotation output, drafting curation notes and this report. Every submitted variant and every number in this report was checked against the VCF, the annotation output or the tool logs.
 
